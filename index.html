@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>News</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="color :white;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">News today </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" id="searchTxt" type="search" placeholder="Search"
+                        aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h3>Top news <span class="badge bg-secondary">By News Today</span></h3>
+        <hr>
+        <div class="card">
+            <div class="accordion accordion-flush" id="newsAccordion">
+
+
+            </div>
+        </div>
+    </div>
+    <script>
+        console.log("this is news wesite");
+
+
+        //initialize the news parameters
+        let source = 'bbc-news';
+        let apiKey = '2b9756a2775c446b882ef79ceb46aeda';
+
+        //grab the news container
+        let newsAccordion = document.getElementById('newsAccordion');
+
+
+        //create an ajax get request
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `https://newsapi.org/v2/top-headlines?country=in&apiKey=${apiKey}`, true);
+
+        //what t do when response is ready
+        xhr.onload = function () {
+            if (this.status == 200) {
+                let json = JSON.parse(this.responseText);
+                let articles = json.articles;
+                // console.log(json);
+                // console.log(json.articles[0].content);
+                let newshtml = ``;
+                articles.forEach(function (element, index) {
+                    // console.log(articles[news]);
+                    let news = `<div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-heading${index}">
+                            <button class="accordion-button collapsed news-item" style="color:Blue;"type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse${index}" aria-expanded="false" aria-controls="flush-collapse${index}">
+                                <strong>Breaking News ${index + 1} :</strong>${element['title']}
+                            </button>
+                            </h2>
+                            <div id="flush-collapse${index}" class="accordion-collapse collapse" aria-labelledby="flush-heading${index}" data-bs-parent="#newsAccordion">
+                            <div class="accordion-body news-item">${element.content}<br><a href="${element.url}" target="_blank">Read more at</a></div>
+                            </div>
+                        </div>`
+                    newshtml += news;
+                }); {
+                }
+                newsAccordion.innerHTML = newshtml;
+
+            }
+            else {
+                console.log('some error occured!!');
+            }
+        }
+
+        xhr.send();
+
+        document.getElementById("searchTxt").addEventListener("input", function () {
+            let inputVal = searchTxt.value;
+            // console.log("input event fire" ,inputVal);
+            let noteCards = document.getElementsByClassName("news-item");
+            Array.from(noteCards).forEach(function (element) {
+
+                let cardTxt = element.innerText;
+                console.log(cardTxt);
+
+                if (cardTxt.includes(inputVal.toUpperCase()) == false || cardTxt.includes(inputVal.toLowerCase()) == false) {
+                    element.style.display = "none";
+
+                }
+                else {
+                    element.style.display = 'block';
+                }
+            });
+        });
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
